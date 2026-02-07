@@ -8,21 +8,26 @@ type NoteDraftStore = {
     clearDraft: () => void;
 };
 
-const initialDraft = {
+export const initialDraft: NewNoteData = {
     title: "",
     content: "",
-    tag: "",
+    tag: "Todo",
 };
 
-const useNoteDraftStore = create<NoteDraftStore>() (persist((set)=> ({
-    draft: initialDraft,
-    setDraft: (note) => set(() => ({ draft: note })),
-    clearDraft: () => set(() => ({ draft: initialDraft })),
-}), {
-    name: "name-draft",
-    partialize: (state) => ({
-        draft: state.draft
-    })
-}));
+const useNoteDraftStore = create<NoteDraftStore>()(
+    persist(
+        (set) => ({
+            draft: initialDraft,
+            setDraft: (note) => set(() => ({ draft: note })),
+            clearDraft: () => set(() => ({ draft: initialDraft })),
+        }),
+        {
+            name: "note-draft",
+            partialize: (state) => ({
+                draft: state.draft,
+            }),
+        }
+    )
+);
 
 export default useNoteDraftStore;
