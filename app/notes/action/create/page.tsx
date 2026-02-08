@@ -1,6 +1,31 @@
+import type { Metadata } from "next";
 import { getCategories } from "@/lib/api";
-import NoteForm from '@/components/NoteForm/NoteForm';
+import NoteForm from "@/components/NoteForm/NoteForm";
 import css from "./CreatePage.module.css";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const ogImageUrl =
+    "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg";
+
+export const metadata: Metadata = {
+    title: "NoteHub — Create a note",
+    description:
+        "Create a new note in NoteHub and keep everything organized in one place.",
+    openGraph: {
+        title: "NoteHub — Create a note",
+        description:
+            "Create a new note in NoteHub and keep everything organized in one place.",
+        url: `${siteUrl}/notes/action/create`,
+        images: [
+            {
+                url: ogImageUrl,
+                width: 1200,
+                height: 630,
+                alt: "NoteHub preview",
+            },
+        ],
+    },
+};
 
 const CreateNote = async() => {
     const categories = await getCategories();
@@ -20,4 +45,4 @@ const CreateNote = async() => {
     );
 };
 
-export default CreateNote
+export default CreateNote;

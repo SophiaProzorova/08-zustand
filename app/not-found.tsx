@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import css from "./Home.module.css";
 
@@ -5,11 +6,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const ogImageUrl =
     "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg";
 
-export const metadata = {
+export const metadata: Metadata = {
     title: "NoteHub — Page not found",
     description:
         "This page does not exist. The resource you are looking for is missing.",
-    url: `${siteUrl}/not-found`,
     openGraph: {
         title: "NoteHub — Page not found",
         description:

@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { toast } from 'react-hot-toast';
 import { Category, createNote, NewNoteData } from '@/lib/api';
@@ -17,27 +17,19 @@ type Props = {
 
 const NoteForm = ({ categories = [], onClose = () => {} }: Props) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { draft, setDraft, clearDraft } = useNoteDraftStore();
-  const [formInitialValues, setFormInitialValues] = useState<NewNoteData>(initialDraft);
-  const hasInitialized = useRef(false);
-
-  useEffect(() => {
-    if (hasInitialized.current) {
-      return;
-    }
-    const normalizedDraft: NewNoteData = {
-      ...initialDraft,
-      ...draft,
-      tag: draft.tag || initialDraft.tag,
-    };
-    setFormInitialValues(normalizedDraft);
-    hasInitialized.current = true;
-  }, [draft]);
+  const [formInitialValues] = useState<NewNoteData>(() => ({
+    ...initialDraft,
+    ...draft,
+    tag: draft.tag || initialDraft.tag,
+  }));
 
   const { mutate, isPending } = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
       toast.success('Note created');
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
       clearDraft();
       onClose();
       router.back();
